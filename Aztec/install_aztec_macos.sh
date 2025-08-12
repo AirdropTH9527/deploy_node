@@ -8,6 +8,9 @@ PURPLE='\033[1;35m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
+# 确保curl和wget已安装
+(command -v curl >/dev/null 2>&1 && command -v wget >/dev/null 2>&1) || brew update; command -v curl >/dev/null 2>&1 || brew install curl; command -v wget >/dev/null 2>&1 || brew install wget
+
 curl -s https://raw.githubusercontent.com/AirdropTH9527/deploy_node/refs/heads/main/logo.sh | bash
 sleep 3
 
