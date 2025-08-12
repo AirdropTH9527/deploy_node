@@ -8,7 +8,7 @@ PURPLE='\033[1;35m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-curl -s https://raw.githubusercontent.com/zunxbt/logo/main/logo.sh | bash
+curl -s https://raw.githubusercontent.com/AirdropTH9527/deploy_node/refs/heads/main/logo.sh | bash
 sleep 3
 
 echo -e "\n${CYAN}${BOLD}---- 检查Docker安装状态 ----${RESET}\n"
