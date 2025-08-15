@@ -100,23 +100,24 @@ if [ -d ".venv" ]; then
   source .venv/bin/activate
 else
   echo "⚠️ 未找到 .venv 虚拟环境，正在自动创建..."
+  # 重新获取Python路径，确保在桌面环境中能正确找到
   if command -v python3.10 >/dev/null 2>&1; then
-    PYTHON=python3.10
+    PYTHON_CMD="python3.10"
   elif command -v python3 >/dev/null 2>&1; then
-    PYTHON=python3
+    PYTHON_CMD="python3"
+  elif command -v python >/dev/null 2>&1; then
+    PYTHON_CMD="python"
   else
-    echo "❌ 未找到 Python 3.10 或 python3，请先安装。"
+    echo "❌ 未找到 Python，请先安装。"
     exit 1
   fi
-  $PYTHON -m venv .venv
+  
+  echo "🔍 使用Python命令: $PYTHON_CMD"
+  $PYTHON_CMD -m venv .venv
+  
   if [ -d ".venv" ]; then
     echo "✅ 虚拟环境创建成功，正在激活..."
     source .venv/bin/activate
-    # 检查并安装web3
-    if ! python -c "import web3" 2>/dev/null; then
-      echo "⚙️ 正在为虚拟环境安装 web3..."
-      pip install web3
-    fi
   else
     echo "❌ 虚拟环境创建失败，跳过激活。"
   fi
