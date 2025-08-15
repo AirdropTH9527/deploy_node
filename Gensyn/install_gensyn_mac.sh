@@ -100,20 +100,20 @@ if [ -d ".venv" ]; then
   source .venv/bin/activate
 else
   echo "⚠️ 未找到 .venv 虚拟环境，正在自动创建..."
-  # 重新获取Python路径，确保在桌面环境中能正确找到
+  # 直接使用命令，避免变量作用域问题
   if command -v python3.10 >/dev/null 2>&1; then
-    PYTHON_CMD="python3.10"
+    echo "🔍 使用 python3.10 创建虚拟环境..."
+    python3.10 -m venv .venv
   elif command -v python3 >/dev/null 2>&1; then
-    PYTHON_CMD="python3"
+    echo "🔍 使用 python3 创建虚拟环境..."
+    python3 -m venv .venv
   elif command -v python >/dev/null 2>&1; then
-    PYTHON_CMD="python"
+    echo "🔍 使用 python 创建虚拟环境..."
+    python -m venv .venv
   else
     echo "❌ 未找到 Python，请先安装。"
     exit 1
   fi
-  
-  echo "🔍 使用Python命令: $PYTHON_CMD"
-  $PYTHON_CMD -m venv .venv
   
   if [ -d ".venv" ]; then
     echo "✅ 虚拟环境创建成功，正在激活..."
