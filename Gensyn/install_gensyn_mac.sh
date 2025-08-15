@@ -115,6 +115,11 @@ else
   if [ -d ".venv" ]; then
     echo "✅ 虚拟环境创建成功，正在激活..."
     source .venv/bin/activate
+    
+    # 安装指定版本的trl包
+    echo "📦 正在安装 trl==0.19.1..."
+    ~/rl-swarm/.venv/bin/pip install --force-reinstall trl==0.19.1
+    echo "✅ trl 安装完成"
   else
     echo "❌ 虚拟环境创建失败，跳过激活。"
   fi
