@@ -82,29 +82,41 @@ if [[ ! -d "rl-swarm" ]]; then
   git clone https://github.com/gensyn-ai/rl-swarm.git
 fi
 
-# ----------- 生成桌面可双击运行的 .desktop 文件 -----------
-echo "🖥️ 生成桌面执行文件..."
-CURRENT_USER=$(whoami)
-PROJECT_DIR="/home/$CURRENT_USER/rl-swarm"
-DESKTOP_DIR="/home/$CURRENT_USER/Desktop"
-mkdir -p "$DESKTOP_DIR"
+# 切换到脚本所在目录
+cd "$HOME/rl-swarm"
 
-script="run_rl_swarm.sh"
-desktop_name="run_rl_swarm.desktop"
-cat > "$DESKTOP_DIR/$desktop_name" <<EOF
-[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=true
-Exec=gnome-terminal --working-directory=$PROJECT_DIR -- bash -c "cd $PROJECT_DIR && ./$script; echo '按任意键关闭...'; read -n 1 -s"
-Name=Run RL-Swarm
-Comment=运行 RL-Swarm 脚本
-Icon=terminal
-Categories=Development;
-EOF
+# 激活虚拟环境并执行 auto_run.sh
+if [ -d ".venv" ]; then
+  echo "🔗 正在激活虚拟环境 .venv..."
+  source .venv/bin/activate
+else
+  echo "⚠️ 未找到 .venv 虚拟环境，正在自动创建..."
+  if command -v python3.10 >/dev/null 2>&1; then
+    PYTHON=python3.10
+  elif command -v python3 >/dev/null 2>&1; then
+    PYTHON=python3
+  else
+    echo "❌ 未找到 Python 3.10 或 python3，请先安装。"
+    exit 1
+  fi
+  $PYTHON -m venv .venv
+  if [ -d ".venv" ]; then
+    echo "✅ 虚拟环境创建成功，正在激活..."
+    source .venv/bin/activate
+    # 检查并安装web3
+    if ! python -c "import web3" 2>/dev/null; then
+      echo "⚙️ 正在为虚拟环境安装 web3..."
+      pip install web3
+    fi
+  else
+    echo "❌ 虚拟环境创建失败，跳过激活。"
+  fi
+fi
 
-chmod +x "$DESKTOP_DIR/$desktop_name"
-echo "✅ 已生成 $desktop_name"
-
-echo "🎉 桌面执行文件生成完成！"
-echo "💡 注意：Ubuntu系统需要双击.desktop文件来运行" 
+# 执行 run_rl_swarm.sh
+if [ -f "./run_rl_swarm.sh" ]; then
+  echo "🚀 执行 ./run_rl_swarm.sh ..."
+  ./run_rl_swarm.sh
+else
+  echo "❌ 未找到 run_rl_swarm.sh，无法执行。"
+fi
