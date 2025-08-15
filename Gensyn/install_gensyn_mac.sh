@@ -87,9 +87,6 @@ trap 'echo -e "\n\\033[33m⚠️ 脚本被中断，但终端将继续运行...\\
 # 进入项目目录
 cd "$PROJECT_DIR" || { echo "❌ 无法进入项目目录"; exit 1; }
 
-# 切换到脚本所在目录
-cd "$HOME/rl-swarm"
-
 # ✅ 设置 MPS 环境（适用于 Mac M1/M2）
 export PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0
 export PYTORCH_ENABLE_MPS_FALLBACK=1
